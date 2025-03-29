@@ -1,0 +1,23 @@
+
+
+  name: check Jenkins directory exists
+  file:
+    path: /opt/jenkins
+    state: directory
+    owner: jenkins
+    group: jenkinds
+    mode: '0755'
+
+  name: Download Jenkins Agent Jar
+  get_url:
+    url: "https://jenkins-master:8080/jnlpJars/agent.jar"
+    dest: "/opt/jenkins/agent.jar"
+    owner: jenkins
+    mode: '0644'
+
+  name: Create System service for Jenkins agent 
+  template:
+    src: jenkins_agent.service.j2
+    dest: /etc/systemd/system/jenkins_agent.service
+  notify: Restart Jenkins Agent 
+

@@ -1,0 +1,13 @@
+  name: Install Java 17 (Jenkins agent dependency)
+  become: yes #Ensure admin priviledges
+  yum:
+    name:java-17-openjdk
+    state: latest #Ensure updates
+
+  name: Create Jenkins user
+  become: yes
+  user:
+    name: jenkins
+    shell: /bin/bash
+    create_home: true
+    home: /home/jenkins
