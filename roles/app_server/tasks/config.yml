@@ -1,0 +1,29 @@
+
+- name: Copy Gunicorn Service File
+    template:
+      src: gunicorn.services.j2
+      dest: /etc/systemd/system/gunicorn.service
+    notify: Restart Gunicorn
+
+- name: Copy Nginx Config
+  template: 
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: Restart Nginx
+
+- name: Ensure MondoDB config file exists
+  stat: 
+    path: /etc/mongod.conf
+    register: mongodb_conf
+
+- name: Configure MongoDB to allow remote connections
+  become: yes
+  lineinfile:
+    path: /etc/mongod.conf
+    regexp: '^  bindIp: 127.0.0.1'
+    line: '  bindIp: 0.0.0.0'
+    backrefs: yes
+  when: mongodb_conf.stat.exists #Only run if file exists
+  notify: restart mongodb
+
+

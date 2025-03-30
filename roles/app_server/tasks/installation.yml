@@ -14,10 +14,11 @@
   when: ansible_distribution == "Ubuntu"
 
   name: Install required packages (RHEL/CentOS)
-  yum:
-    name: "{{ item }}"
-    state: present 
-  loop:
+    become: yes
+    yum:
+      name: "{{ item }}"
+      state: present 
+    loop:
     python3
     python3-pip
     python3-virtualenv
@@ -30,6 +31,7 @@
     creates: /opt/myapp/venv
 
 -  name: Install Flask and Gunicorn using pythonn3-pip
+    become: yes
     pip:
       name: 
           Flask
