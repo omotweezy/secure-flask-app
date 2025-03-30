@@ -1,3 +1,4 @@
+
 use securedb;
 db.messages.insertMany([
   { text: "Hello from MongoDB!" },
